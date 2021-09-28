@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     String username = "Admin";
     String password = "1234";
     boolean isValue = false;
-    int counter = 5;
+    int counter = 6;
 
 
     @Override
