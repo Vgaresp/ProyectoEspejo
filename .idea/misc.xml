@@ -8,10 +8,10 @@
         <entry key="app/src/main/res/drawable/gotita.xml" value="0.12777777777777777" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.1962962962962963" />
         <entry key="app/src/main/res/layout/activity_home_page.xml" value="0.14444444444444443" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.13125" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23652173913043478" />
         <entry key="app/src/main/res/layout/activity_primera.xml" value="0.2328125" />
-        <entry key="app/src/main/res/layout/activity_register.xml" value="0.2328125" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.165" />
       </map>
     </option>
   </component>

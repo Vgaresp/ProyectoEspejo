@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,9 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     boolean isValue = false;
     int counter = 5;
 
-    FirebaseAuth mAuth;
-    DatabaseReference mDataBase;
-
 
 
     @Override
@@ -43,12 +42,19 @@ public class LoginActivity extends AppCompatActivity {
         context = this;
 
 //        Setup
-        setup();
-//        setupbd(); //con prueba automatica sin bd
+//        setup();  //con prueba automatica sin bd
+        setupbd();
         }
 
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
-    private void setup() {
+
+    private void setupbd() {
 
         Button signUpButton = this.findViewById(R.id.signUpButton);
         EditText textLogin = this.findViewById(R.id.editTextTextPersonName);
@@ -70,48 +76,17 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                 startActivity(intent);
                             }else{
-                                Toast.makeText(LoginActivity.this, "Habia un error el acceder a tu perfil", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Incorrecto usuario o/y contrasena", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }
-
-
-//                    mAuth.signInWithEmailAndPassword(name,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if(task.isSuccessful()){
-//
-//
-//                                Map<String,Object> map = new HashMap<>();
-//                                map.put("Usuario",name);
-//                                map.put("Contrasena",pass);
-//
-//                                String id = mAuth.getCurrentUser().getUid();
-//
-//                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//                                startActivity(intent);
-////
-////                                mDataBase.child("Users").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-////                                    @Override
-////                                    public void onComplete(@NonNull Task<Void> taskZ) {
-////                                        if(taskZ.isSuccessful()){
-////                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-////                                            startActivity(intent);
-//////                                finish(); //Para evitar que vuelva a la pantalla del registro
-////
-////                                        }
-////                                        else{
-////                                            Toast.makeText(LoginActivity.this, "Habia un error en crear nuevos datos", Toast.LENGTH_SHORT).show();
-////                                        }
-////                                    }
-////                                });
-//
-//                            }else{
-//                                Toast.makeText(LoginActivity.this,"No se pudo acceder al perfil",Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
+                if(inputName.isEmpty() || inputPassword.isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+                }
+                if(!isEmailValid(inputName)){
+                    Toast.makeText(LoginActivity.this, "Incierta tu email por favor", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -127,33 +102,74 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void setupbd(){
+    private void setup() {
         Button signUpButton = this.findViewById(R.id.signUpButton);
         EditText textLogin = this.findViewById(R.id.editTextTextPersonName);
         EditText textPassword = this.findViewById(R.id.editTextTextPassword);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 String inputName = textLogin.getText().toString();
                 String inputPassword = textPassword.getText().toString();
 
-                if(!inputName.isEmpty() || !inputPassword.isEmpty()){
+                if (inputName.isEmpty() || inputPassword.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Please enter all the details correctly", Toast.LENGTH_SHORT).show();
+                } else {
+                    isValue = validate(inputName, inputPassword);
+                }
 
+                if (!isValue) {
+                    counter--;
+                    Toast.makeText(LoginActivity.this, "Incorrect", Toast.LENGTH_SHORT).show();
+
+                    if (counter == 0) {
+                        signUpButton.setEnabled(false);
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivity(intent);
                 }
             }
         });
 
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String inputName = textLogin.getText().toString();
+                String inputPassword = textPassword.getText().toString();
+
+                if (inputName.isEmpty() || inputPassword.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Please enter all the details correctly", Toast.LENGTH_SHORT).show();
+                } else {
+                    isValue = validate(inputName, inputPassword);
+                }
+
+                if (!isValue) {
+                    counter--;
+                    Toast.makeText(LoginActivity.this, "Incorrect", Toast.LENGTH_SHORT).show();
+//                        if(counter ==0){
+//                            signUpButton.setEnabled(false);
+//                        }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                    // add the code to go to a new activity
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
+    private boolean validate(String name, String pass){
 
-    private boolean validate(String name, String password){
-
-        if(name.equals(username) && password.equals(passwordd)){
+        if(name.equals(username) && pass.equals(passwordd)){
             return true;
         }
         return false;
     }
-
-
 }

@@ -11,7 +11,7 @@
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#8CD9FB"
+        android:background="#71D3D6"
         android:text="@string/welcome_home"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

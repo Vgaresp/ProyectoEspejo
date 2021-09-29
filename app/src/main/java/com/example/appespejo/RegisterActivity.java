@@ -83,8 +83,9 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> taskZ) {
                             if(taskZ.isSuccessful()){
-                                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                                startActivity(intent);
+
+                                Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
+                                startActivity(intent2);
 //                                finish(); //Para evitar que vuelva a la pantalla del registro
 
                             }
