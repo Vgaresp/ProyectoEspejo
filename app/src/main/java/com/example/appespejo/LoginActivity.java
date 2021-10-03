@@ -6,15 +6,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
@@ -32,6 +43,9 @@ public class LoginActivity extends AppCompatActivity {
     String passwordd = "1234";
     boolean isValue = false;
     int counter = 5;
+    private GoogleSignInClient mGoogleSignInClient;
+    private final static int RC_SIGN_IN = 123;
+    private FirebaseAuth mAuth;
 
 
 
@@ -40,11 +54,67 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = this;
+        mAuth = FirebaseAuth.getInstance();
+
 
 //        Setup
 //        setup();  //con prueba automatica sin bd
         setupbd();
+        createRequest();
         }
+
+        private void createRequest(){
+
+            // Configure sign-in to request the user's ID, email address, and basic
+            // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail() //request to google to open a popup
+                    .build();
+
+            // Build a GoogleSignInClient with the options specified by gso.
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
+        }
+
+        private void signInGoogle() {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Toast.makeText(this, e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                        }
+                    }
+                });
+    }
 
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -59,7 +129,9 @@ public class LoginActivity extends AppCompatActivity {
         Button signUpButton = this.findViewById(R.id.signUpButton);
         EditText textLogin = this.findViewById(R.id.editTextTextPersonName);
         EditText textPassword = this.findViewById(R.id.editTextTextPassword);
-        Button register = this.findViewById(R.id.button2);
+        TextView register = this.findViewById(R.id.register);
+        ImageButton google = this.findViewById(R.id.googleLogin);
+//        ImageButton facebook = this.findViewById(R.id.fbLogin);
 
         signUpButton.setOnClickListener(new View.OnClickListener(){ //para logear
 
@@ -90,7 +162,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
         register.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -98,6 +169,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
 
+        });
+
+        google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signInGoogle();
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+//                finish();
+            }
         });
 
     }

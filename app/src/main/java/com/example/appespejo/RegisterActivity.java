@@ -45,6 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
         Button register = this.findViewById(R.id.registrarmeButton);
         EditText usuario = this.findViewById(R.id.EditTextRegUsername);
         EditText contrasena = this.findViewById(R.id.editTextRegContras);
+        EditText nombre = this.findViewById(R.id.Nombre);
+        EditText apellido = this.findViewById(R.id.Apellido);
 
         register.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -73,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
 
-                    Map<String,Object> map = new HashMap<>();
+/*                    Map<String,Object> map = new HashMap<>();
                     map.put("Usuario",name);
                     map.put("Contrasena",pass);
 
@@ -83,20 +85,21 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> taskZ) {
                             if(taskZ.isSuccessful()){
+*/
+                    Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
+                    startActivity(intent2);
+                    //finish(); //Para evitar que vuelva a la pantalla del registro
 
-                                Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
-                                startActivity(intent2);
-//                                finish(); //Para evitar que vuelva a la pantalla del registro
-
-                            }
+  /*                          }
                             else{
                                 Toast.makeText(RegisterActivity.this, "Habia un error en crear nuevos datos", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-
+*/
                 }else{
-                    Toast.makeText(RegisterActivity.this,"No se pudo registrar el usuario",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this,"No se pudo registrar el usuario "
+                            +task.getException().getLocalizedMessage(),Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -4,90 +4,103 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#AEBBC8"
     tools:context=".RegisterActivity">
 
     <EditText
         android:id="@+id/EditTextRegUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="290dp"
+        android:backgroundTint="#34445B"
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
         android:textColor="@color/black"
-        android:textColorHint="#7A7A7A"
+        android:textColorHint="#7A7777"
         app:layout_constraintBottom_toTopOf="@+id/editTextRegContras"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/regnombre"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Apellido" />
 
     <EditText
         android:id="@+id/editTextRegContras"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:backgroundTint="#34445B"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPersonName"
         android:password="true"
         android:textColor="@color/black"
-        android:textColorHint="#777777"
+        android:textColorHint="#7A7777"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/regContr"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EditTextRegUsername" />
-
-    <TextView
-        android:id="@+id/regnombre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:text="Nombre:"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/regContr"
-        app:layout_constraintEnd_toStartOf="@+id/EditTextRegUsername"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/regContr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
-        android:text="Password"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/editTextRegContras"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regnombre" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="512dp" />
+        app:layout_constraintGuide_begin="561dp" />
 
     <Button
         android:id="@+id/registrarmeButton"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="40dp"
-        android:background="#71D3D6"
+        android:background="#374459"
         android:text="registrarme"
-        android:textColor="@color/black"
+        android:textColor="#EBEBEB"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintVertical_bias="0.361" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="278dp"
-        app:layout_constraintBottom_toTopOf="@+id/EditTextRegUsername"
+        android:layout_width="247dp"
+        android:layout_height="223dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gota2" />
+        app:srcCompat="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/Apellido"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#34445B"
+        android:ems="10"
+        android:hint="Apellido:"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textColorHint="#7A7777"
+        app:layout_constraintBottom_toTopOf="@+id/EditTextRegUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Nombre" />
+
+    <EditText
+        android:id="@+id/Nombre"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#34445B"
+        android:ems="10"
+        android:hint="Nombre:"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textColorHighlight="#34445B"
+        android:textColorHint="#7A7777"
+        android:textColorLink="#34445B"
+        app:layout_constraintBottom_toTopOf="@+id/Apellido"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
