@@ -4,30 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".HomeActivity">
+    android:background="#ABBACA"
+    tools:context=".RecuperarContr">
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/correo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#EBEBEB"
-        android:text="@string/welcome_home"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="#5A595B"
+        android:ems="10"
+        android:hint="Tu email"
+        android:inputType="textPersonName"
+        android:textColorHint="#5A595B"
+        app:layout_constraintBottom_toTopOf="@+id/enviar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/logout"
-        android:layout_width="300dp"
+        android:id="@+id/enviar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="#374358"
-        android:text="Log out"
+        android:text="Enviar el email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
-
+        app:layout_constraintTop_toBottomOf="@+id/correo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

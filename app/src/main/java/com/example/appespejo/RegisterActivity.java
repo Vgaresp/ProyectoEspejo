@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +28,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private String name = "";
     private String pass = "";
+    private String repetir="";
+    private String nombree = "";
+    private String apellido = "";
 
     FirebaseAuth mAuth;
     DatabaseReference mDataBase;
@@ -44,9 +49,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         Button register = this.findViewById(R.id.registrarmeButton);
         EditText usuario = this.findViewById(R.id.EditTextRegUsername);
-        EditText contrasena = this.findViewById(R.id.editTextRegContras);
+//        EditText contrasena = this.findViewById(R.id.editTextRegContras);
+//        EditText repit = this.findViewById(R.id.repitPass);
         EditText nombre = this.findViewById(R.id.Nombre);
-        EditText apellido = this.findViewById(R.id.Apellido);
+        EditText apellidos = this.findViewById(R.id.Apellido);
+        TextInputEditText contrasena = this.findViewById(R.id.textInputEditText);
+        TextInputEditText repit = this.findViewById(R.id.repitPassword);
 
         register.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -54,15 +62,25 @@ public class RegisterActivity extends AppCompatActivity {
 
                 name = usuario.getText().toString();
                 pass = contrasena.getText().toString();
+                repetir = repit.getText().toString();
+                nombree = nombre.getText().toString();
+                apellido = apellidos.getText().toString();
 
-                if(!name.isEmpty() || !pass.isEmpty()){
-                    if(pass.length() < 6){
+                if(!name.isEmpty() || !pass.isEmpty()||!repetir.isEmpty()||!nombree.isEmpty()||!apellido.isEmpty()){
+                    if(pass.length() < 6 ||repetir.length() <6){
                         Toast.makeText(RegisterActivity.this, "La contrasena debe consistir al menos 6 caracteres", Toast.LENGTH_SHORT).show();
-                    }else{
+                    }
+
+                    else if(!repetir.equals(pass)){
+                        Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                    }
+
+                    else{
                         registerUser();
                     }
 
-                }else{
+
+                } else{
                     Toast.makeText(RegisterActivity.this, "Debe completar los campos", Toast.LENGTH_SHORT).show();
                 }
             }

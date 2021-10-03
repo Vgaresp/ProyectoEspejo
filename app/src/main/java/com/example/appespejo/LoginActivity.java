@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,15 +20,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     Context context;
     private String name="";
     private String pass="";
-
     String username = "Admin";
     String passwordd = "1234";
     boolean isValue = false;
@@ -127,11 +124,14 @@ public class LoginActivity extends AppCompatActivity {
     private void setupbd() {
 
         Button signUpButton = this.findViewById(R.id.signUpButton);
-        EditText textLogin = this.findViewById(R.id.editTextTextPersonName);
-        EditText textPassword = this.findViewById(R.id.editTextTextPassword);
+//        EditText textLogin = this.findViewById(R.id.editTextTextPersonName);
+//        EditText textPassword = this.findViewById(R.id.editTextTextPassword);
         TextView register = this.findViewById(R.id.register);
         ImageButton google = this.findViewById(R.id.googleLogin);
 //        ImageButton facebook = this.findViewById(R.id.fbLogin);
+        TextView recuperar = this.findViewById(R.id.Recuperar);
+        TextInputEditText textLogin = this.findViewById(R.id.login);
+        TextInputEditText textPassword = this.findViewById(R.id.textInputEditText);
 
         signUpButton.setOnClickListener(new View.OnClickListener(){ //para logear
 
@@ -181,12 +181,20 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        recuperar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RecuperarContr.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void setup() {
         Button signUpButton = this.findViewById(R.id.signUpButton);
-        EditText textLogin = this.findViewById(R.id.editTextTextPersonName);
-        EditText textPassword = this.findViewById(R.id.editTextTextPassword);
+        TextInputEditText textLogin = this.findViewById(R.id.login);
+        TextInputEditText textPassword = this.findViewById(R.id.textInputEditText);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
