@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,6 +39,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +66,10 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         createRequest();
 //        setup();  //con prueba automatica sin bd
-        setupbd();
+            setupbd();
+
         }
+
 
 
 
@@ -140,9 +144,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
-
-
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
@@ -160,6 +161,8 @@ public class LoginActivity extends AppCompatActivity {
         TextView recuperar = this.findViewById(R.id.Recuperar);
         TextInputEditText textLogin = this.findViewById(R.id.login);
         TextInputEditText textPassword = this.findViewById(R.id.textInputEditText);
+
+
 
         signUpButton.setOnClickListener(new View.OnClickListener(){ //para logear
 
@@ -202,9 +205,23 @@ public class LoginActivity extends AppCompatActivity {
         google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn();
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
+
+//                signIn();
+
+
+//                List<AuthUI.IdpConfig> providers = Arrays.asList(
+//                        new AuthUI.IdpConfig.GoogleBuilder().build());
+//                startActivityForResult(
+//                        AuthUI.getInstance().createSignInIntentBuilder()
+//                                .setAvailableProviders(providers)
+//                                .setIsSmartLockEnabled(false)
+//                                .build(),
+//                        RC_SIGN_IN);
+//                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+//                signIn();
+//                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+//                startActivity(intent);
             }
         });
 

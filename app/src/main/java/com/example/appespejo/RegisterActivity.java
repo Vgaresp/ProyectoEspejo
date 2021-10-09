@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -20,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     DatabaseReference mDataBase;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +85,8 @@ public class RegisterActivity extends AppCompatActivity {
                     }
 
 
-                } else{
+                }
+                else{
                     Toast.makeText(RegisterActivity.this, "Debe completar los campos", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -88,39 +94,79 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(){
-        mAuth.createUserWithEmailAndPassword(name,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
 
-/*                    Map<String,Object> map = new HashMap<>();
-                    map.put("Usuario",name);
-                    map.put("Contrasena",pass);
+        EditText usuario = this.findViewById(R.id.EditTextRegUsername);
+        EditText nombre = this.findViewById(R.id.Nombre);
+        EditText apellidos = this.findViewById(R.id.Apellido);
+        TextInputEditText contrasena = this.findViewById(R.id.textInputEditText);
 
-                    String id = mAuth.getCurrentUser().getUid();
+        name = usuario.getText().toString();
+        pass = contrasena.getText().toString();
+        nombree = nombre.getText().toString();
+        apellido = apellidos.getText().toString();
 
-                    mDataBase.child("Users").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> taskZ) {
-                            if(taskZ.isSuccessful()){
-*/
-                    Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
-                    startActivity(intent2);
-                    //finish(); //Para evitar que vuelva a la pantalla del registro
+        // Create a new user with a first and last name
+        Map<String, String> user = new HashMap<>();
+        user.put("Apellido", apellido);
+        user.put("Contrasena", pass);
+        user.put("Email", name);
+        user.put("Nombre", nombree);
 
-  /*                          }
-                            else{
-                                Toast.makeText(RegisterActivity.this, "Habia un error en crear nuevos datos", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-*/
-                }else{
-                    Toast.makeText(RegisterActivity.this,"No se pudo registrar el usuario "
-                            +task.getException().getLocalizedMessage(),Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        db.collection("Usuarios")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(RegisterActivity.this, "Gracias por tu registro"+nombree, Toast.LENGTH_SHORT).show();
+
+                        Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
+                        startActivity(intent2);
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(RegisterActivity.this,"No se pudo registrar el usuario ",Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+//        mAuth.createUserWithEmailAndPassword(name,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                if(task.isSuccessful()){
+//
+///*                    Map<String,Object> map = new HashMap<>();
+//                    map.put("Usuario",name);
+//                    map.put("Contrasena",pass);
+//
+//
+//
+//                    String id = mAuth.getCurrentUser().getUid();
+//
+//                    mDataBase.child("Users").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> taskZ) {
+//                            if(taskZ.isSuccessful()){
+//*/
+//                    Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
+//                    startActivity(intent2);
+//                    //finish(); //Para evitar que vuelva a la pantalla del registro
+//
+//  /*                          }
+//                            else{
+//                                Toast.makeText(RegisterActivity.this, "Habia un error en crear nuevos datos", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//*/
+//                }else{
+//                    Toast.makeText(RegisterActivity.this,"No se pudo registrar el usuario "
+//                            +task.getException().getLocalizedMessage(),Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
 
     }
 

@@ -11,7 +11,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SplashScreen extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,14 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
-                startActivity(intent);
+
+//                Si el usuario ya esta logeado nos envia a Homed directamente. Si no, a Login
+
+//                if(mAuth.getCurrentUser() == null){
+                    startActivity(new Intent(SplashScreen.this, LoginActivity.class));
+//                }else{
+//                    startActivity(new Intent(SplashScreen.this, HomeActivity.class));
+//                }
                 finish();
             }
         },4000);

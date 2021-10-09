@@ -117,7 +117,7 @@
         android:id="@+id/textInputLayout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="76dp"
         android:backgroundTint="#32435C"
         android:textColor="#000000"
         android:textColorHint="#7D7B7B"
@@ -132,6 +132,20 @@
         app:passwordToggleTint="#7E7D7D">
 
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:backgroundTint="#32435C"
+            android:fontFamily="@font/lucidagrande"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:textColor="#000000"
+            android:textColorHighlight="#2F435E"
+            android:textColorHint="#7C7A7A"
+            android:textColorLink="#448AFF"
+            app:hintTextColor="#FFFFFF" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <View
@@ -169,25 +183,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/googleLogin"
         app:srcCompat="@drawable/fb45" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/textInputEditText"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="#32435C"
-        android:fontFamily="@font/lucidagrande"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:textColor="#000000"
-        android:textColorHighlight="#2F435E"
-        android:textColorHint="#7C7A7A"
-        android:textColorLink="#448AFF"
-        app:hintTextColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
