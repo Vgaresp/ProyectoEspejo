@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -21,11 +22,15 @@ public class SplashScreen extends AppCompatActivity {
         //Animacion
 
         Animation animacion1 = AnimationUtils.loadAnimation(this,R.anim.desplazamiento_arriba);
-//        Animation animacion2 = AnimationUtils.loadAnimation(this,R.anim.desplazamiento_abajo);
+        Animation animacion2 = AnimationUtils.loadAnimation(this,R.anim.desplazamiento_abajo);
 
         ImageView logo = this.findViewById(R.id.imageView4);
+        TextView text1 = this.findViewById(R.id.textView3);
+        TextView text2 = this.findViewById(R.id.textView4);
 
         logo.setAnimation(animacion1);
+        text1.setAnimation(animacion2);
+        text2.setAnimation(animacion2);
 
         new Handler().postDelayed(new Runnable() {
             @Override

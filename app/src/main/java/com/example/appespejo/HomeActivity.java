@@ -25,6 +25,7 @@ public class HomeActivity extends AppCompatActivity {
         setup();
     }
 
+
     private void setup(){
 
         logout = this.findViewById(R.id.logout);
@@ -34,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
         if(signInAccount !=null){
-            nombre.setText(signInAccount.getDisplayName());
+            nombre.setText(signInAccount.getIdToken());
             correo.setText(signInAccount.getEmail());
         }
 
@@ -43,7 +44,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
             }
         });
