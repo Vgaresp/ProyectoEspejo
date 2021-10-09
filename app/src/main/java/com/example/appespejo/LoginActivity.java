@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
@@ -45,19 +47,25 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = this;
+        createRequest();
         mAuth = FirebaseAuth.getInstance();
-
-
-//        Setup
 //        setup();  //con prueba automatica sin bd
         setupbd();
-        createRequest();
+
+
         }
 
         private void createRequest(){
@@ -71,13 +79,14 @@ public class LoginActivity extends AppCompatActivity {
             // Build a GoogleSignInClient with the options specified by gso.
             mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-
         }
 
         private void signInGoogle() {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
+//            startActivity(signInIntent,RC_SIGN_IN);
         }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -107,11 +116,17 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-
+//                            updateUI(user);
+                            Intent intent = new Intent (getApplicationContext(), HomeActivity.class);
+                            startActivity(intent);
+                        } else{
+                            Toast.makeText(LoginActivity.this, "Fail auth google",Toast.LENGTH_SHORT).show();
                         }
                     }
+
                 });
     }
+    
 
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -124,11 +139,9 @@ public class LoginActivity extends AppCompatActivity {
     private void setupbd() {
 
         Button signUpButton = this.findViewById(R.id.signUpButton);
-//        EditText textLogin = this.findViewById(R.id.editTextTextPersonName);
-//        EditText textPassword = this.findViewById(R.id.editTextTextPassword);
         TextView register = this.findViewById(R.id.register);
         ImageButton google = this.findViewById(R.id.googleLogin);
-//        ImageButton facebook = this.findViewById(R.id.fbLogin);
+        ImageButton facebook = this.findViewById(R.id.facebook);
         TextView recuperar = this.findViewById(R.id.Recuperar);
         TextInputEditText textLogin = this.findViewById(R.id.login);
         TextInputEditText textPassword = this.findViewById(R.id.textInputEditText);
@@ -175,11 +188,18 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 signInGoogle();
+                Toast.makeText(LoginActivity.this, "Fail al entrar", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(intent);
-//                finish();
             }
         });
+
+//        facebook.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
         recuperar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,35 +243,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String inputName = textLogin.getText().toString();
-                String inputPassword = textPassword.getText().toString();
-
-                if (inputName.isEmpty() || inputPassword.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please enter all the details correctly", Toast.LENGTH_SHORT).show();
-                } else {
-                    isValue = validate(inputName, inputPassword);
-                }
-
-                if (!isValue) {
-                    counter--;
-                    Toast.makeText(LoginActivity.this, "Incorrect", Toast.LENGTH_SHORT).show();
-//                        if(counter ==0){
-//                            signUpButton.setEnabled(false);
-//                        }
-                } else {
-                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-
-                    // add the code to go to a new activity
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
     }
 
     private boolean validate(String name, String pass){
