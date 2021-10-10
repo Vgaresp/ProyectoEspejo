@@ -1,5 +1,6 @@
 package com.example.appespejo;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -43,7 +44,7 @@ public class SplashScreen extends AppCompatActivity {
 //                Si el usuario ya esta logeado nos envia a Homed directamente. Si no, a Login
 
 //                if(mAuth.getCurrentUser() == null){
-                    startActivity(new Intent(SplashScreen.this, LoginActivity.class));
+                startActivity(new Intent(SplashScreen.this, LoginActivity.class));
 //                }else{
 //                    startActivity(new Intent(SplashScreen.this, HomeActivity.class));
 //                }

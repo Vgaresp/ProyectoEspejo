@@ -16,16 +16,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class HomeActivity extends AppCompatActivity {
 
-    TextView nombre,correo;
+    TextView nombre,correo,name;
     Button logout;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth;
 
 
     @Override
@@ -35,7 +39,6 @@ public class HomeActivity extends AppCompatActivity {
         setup();
     }
 
-
     private void setup(){
 
         logout = this.findViewById(R.id.logout);
@@ -44,6 +47,14 @@ public class HomeActivity extends AppCompatActivity {
         FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
+
+        if(signInAccount != null){
+//            nombre.setText(signInAccount.getIdToken());
+//            correo.setText(mAuth.getCurrentUser().getEmail());
+        } else{
+            nombre.setText("Nombre");
+            correo.setText("Correo");
+        }
 
 
 //        if(usuario !=null){

@@ -5,6 +5,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -18,7 +19,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
+//import com.firebase.ui.auth.AuthUI;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,9 +49,19 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 import java.util.Arrays;
 import java.util.List;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,29 +70,74 @@ public class LoginActivity extends AppCompatActivity {
     Context context;
     private String name="";
     private String pass="";
-    String username = "Admin";
-    String passwordd = "1234";
-    boolean isValue = false;
-    int counter = 5;
-    private GoogleSignInClient mGoogleSignInClient;
+    public GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CallbackManager callbackManager;
+//    private LoginButton loginButton;
 
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+////        updateUI(currentUser);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        facebook();
         context = this;
         mAuth = FirebaseAuth.getInstance();
         createRequest();
-//        setup();  //con prueba automatica sin bd
-            setupbd();
-
+        setupbd();
         }
 
 
+        private void facebook(){
+            callbackManager = CallbackManager.Factory.create();
 
+            LoginButton loginButton = findViewById(R.id.login_button);
+            loginButton.setPermissions(Arrays.asList("email,user_gender"));
+
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    Log.d("Demo","Login successfull");
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                }
+
+                @Override
+                public void onCancel() {
+                    Log.d("Demo","Login onCancel");
+                }
+
+                @Override
+                public void onError(@NonNull FacebookException e) {
+                    Log.d("Demo","Login onError");
+                }
+            });
+        }
+
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                if(currentAccessToken == null){
+                    LoginManager.getInstance().logOut();
+                }
+            }
+        };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accessTokenTracker.startTracking();
+    }
 
     private void createRequest(){
 
@@ -86,38 +152,56 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-        private void signIn() {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            activityResultLaunch.launch(signInIntent);
-//            startActivityForResult(signInIntent, RC_SIGN_IN);
-        }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
 
+        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(@Nullable JSONObject object, @Nullable GraphResponse graphResponse) {
+                Log.d("Demo", object.toString());
+            }
+        });
 
-    ActivityResultLauncher<Intent> activityResultLaunch = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    int requestCode, resultCode;
-                    Intent data = new Intent();
-                    if (result.getResultCode() == 123) {
-                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                        try {
-                            // Google Sign In was successful, authenticate with Firebase
-                            GoogleSignInAccount account = task.getResult(ApiException.class);
-//                                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                            firebaseAuthWithGoogle(account.getIdToken());
-                        } catch (ApiException e) {
-                            // Google Sign In failed, update UI appropriately
-//                                Log.w(TAG, "Google sign in failed", e);
-                        }
+        Bundle bundle = new Bundle();
+        bundle.putString("fields","gender, first_name,  email");
+        graphRequest.setParameters(bundle);
+        graphRequest.executeAsync();
+    }
 
-                    } else if (result.getResultCode() == 321) {
-                        // ToDo : Do your stuff...
-                    }
-                }
-            });
+//        private void signIn() {
+//            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//            activityResultLaunch.launch(signInIntent);
+////            startActivityForResult(signInIntent, RC_SIGN_IN);
+//        }
+//
+//
+//    ActivityResultLauncher<Intent> activityResultLaunch = registerForActivityResult(
+//            new ActivityResultContracts.StartActivityForResult(),
+//            new ActivityResultCallback<ActivityResult>() {
+//                @Override
+//                public void onActivityResult(ActivityResult result) {
+//                    int requestCode, resultCode;
+//                    Intent data = new Intent();
+//                    if (result.getResultCode() == 123) {
+//                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//                        try {
+//                            // Google Sign In was successful, authenticate with Firebase
+//                            GoogleSignInAccount account = task.getResult(ApiException.class);
+////                                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+//                            firebaseAuthWithGoogle(account.getIdToken());
+//                        } catch (ApiException e) {
+//                            // Google Sign In failed, update UI appropriately
+////                                Log.w(TAG, "Google sign in failed", e);
+//                        }
+//
+//                    } else if (result.getResultCode() == 321) {
+//                        // ToDo : Do your stuff...
+//                    }
+//                }
+//            });
 
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -140,9 +224,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 });
     }
-
-
-
+    
 
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
@@ -161,8 +243,6 @@ public class LoginActivity extends AppCompatActivity {
         TextView recuperar = this.findViewById(R.id.Recuperar);
         TextInputEditText textLogin = this.findViewById(R.id.login);
         TextInputEditText textPassword = this.findViewById(R.id.textInputEditText);
-
-
 
         signUpButton.setOnClickListener(new View.OnClickListener(){ //para logear
 
@@ -205,23 +285,9 @@ public class LoginActivity extends AppCompatActivity {
         google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 //                signIn();
-
-
-//                List<AuthUI.IdpConfig> providers = Arrays.asList(
-//                        new AuthUI.IdpConfig.GoogleBuilder().build());
-//                startActivityForResult(
-//                        AuthUI.getInstance().createSignInIntentBuilder()
-//                                .setAvailableProviders(providers)
-//                                .setIsSmartLockEnabled(false)
-//                                .build(),
-//                        RC_SIGN_IN);
-//                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-
-//                signIn();
-//                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -240,47 +306,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void setup() {
-        Button signUpButton = this.findViewById(R.id.signUpButton);
-        TextInputEditText textLogin = this.findViewById(R.id.login);
-        TextInputEditText textPassword = this.findViewById(R.id.textInputEditText);
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String inputName = textLogin.getText().toString();
-                String inputPassword = textPassword.getText().toString();
-
-                if (inputName.isEmpty() || inputPassword.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please enter all the details correctly", Toast.LENGTH_SHORT).show();
-                } else {
-                    isValue = validate(inputName, inputPassword);
-                }
-
-                if (!isValue) {
-                    counter--;
-                    Toast.makeText(LoginActivity.this, "Incorrect", Toast.LENGTH_SHORT).show();
-
-                    if (counter == 0) {
-                        signUpButton.setEnabled(false);
-                    }
-                } else {
-                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-
-    }
-
-    private boolean validate(String name, String pass){
-
-        if(name.equals(username) && pass.equals(passwordd)){
-            return true;
-        }
-        return false;
     }
 }

@@ -85,8 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
 
 
-                }
-                else{
+                } else{
                     Toast.makeText(RegisterActivity.this, "Debe completar los campos", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -94,7 +93,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(){
+        mAuth.createUserWithEmailAndPassword(name,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
 
+/*
+                    String id = mAuth.getCurrentUser().getUid();
         EditText usuario = this.findViewById(R.id.EditTextRegUsername);
         EditText nombre = this.findViewById(R.id.Nombre);
         EditText apellidos = this.findViewById(R.id.Apellido);
@@ -168,6 +173,8 @@ public class RegisterActivity extends AppCompatActivity {
 //            }
 //        });
 
+                }
+            }
+        });
     }
-
 }
