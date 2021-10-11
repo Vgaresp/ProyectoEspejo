@@ -169,15 +169,32 @@ public class LoginActivity extends AppCompatActivity {
         bundle.putString("fields","gender, first_name,  email");
         graphRequest.setParameters(bundle);
         graphRequest.executeAsync();
+
+//        if (RC_SIGN_IN == 123) {
+//                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//                        try {
+//                            // Google Sign In was successful, authenticate with Firebase
+//                            GoogleSignInAccount account = task.getResult(ApiException.class);
+////                                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+//                            firebaseAuthWithGoogle(account.getIdToken());
+//                        } catch (ApiException e) {
+//                            // Google Sign In failed, update UI appropriately
+////                                Log.w(TAG, "Google sign in failed", e);
+//                        }
+//
+//                    } else if (RC_SIGN_IN == 321) {
+//                        // ToDo : Do your stuff...
+//                    }
     }
 
-//        private void signIn() {
-//            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+
+        private void signIn() {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 //            activityResultLaunch.launch(signInIntent);
-////            startActivityForResult(signInIntent, RC_SIGN_IN);
-//        }
-//
-//
+//            startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
+
+
 //    ActivityResultLauncher<Intent> activityResultLaunch = registerForActivityResult(
 //            new ActivityResultContracts.StartActivityForResult(),
 //            new ActivityResultCallback<ActivityResult>() {
@@ -285,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
         google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                signIn();
+                signIn();
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(intent);
             }

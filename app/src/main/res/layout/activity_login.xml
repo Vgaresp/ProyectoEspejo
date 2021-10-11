@@ -109,7 +109,8 @@
             android:textColorHighlight="#2F435E"
             android:textColorHint="#7C7A7A"
             android:textColorLink="#448AFF"
-            app:hintTextColor="#FFFFFF" />
+            app:hintTextColor="#FFFFFF"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +136,6 @@
             android:id="@+id/textInputEditText"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
             android:backgroundTint="#32435C"
             android:fontFamily="@font/lucidagrande"
             android:hint="Contraseña"
@@ -186,7 +186,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/googleLogin"
-        app:srcCompat="@drawable/fb45" />
+        app:srcCompat="@drawable/fb45"
+        tools:ignore="DuplicateClickableBoundsCheck,DuplicateClickableBoundsCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
@@ -195,6 +196,11 @@
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/fb45"
+        android:capitalize="none"
+        android:clickable="false"
+        android:drawableBottom="@drawable/fb45"
+        android:editable="true"
+        android:foreground="@drawable/fb45"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="30sp"
@@ -203,6 +209,13 @@
         app:layout_constraintEnd_toEndOf="@+id/facebook"
         app:layout_constraintStart_toStartOf="@+id/facebook"
         tools:ignore="DuplicateClickableBoundsCheck" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googlelib"
+        android:layout_width="300dp"
+        android:layout_height="30dp">
+
+    </com.google.android.gms.common.SignInButton>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
