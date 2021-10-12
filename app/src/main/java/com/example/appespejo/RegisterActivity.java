@@ -155,24 +155,15 @@ public class RegisterActivity extends AppCompatActivity {
 //                        public void onComplete(@NonNull Task<Void> taskZ) {
 //                            if(taskZ.isSuccessful()){
 //*/
-//                    Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
-//                    startActivity(intent2);
-//                    //finish(); //Para evitar que vuelva a la pantalla del registro
-//
-//  /*                          }
-//                            else{
-//                                Toast.makeText(RegisterActivity.this, "Habia un error en crear nuevos datos", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
-//*/
-//                }else{
-//                    Toast.makeText(RegisterActivity.this,"No se pudo registrar el usuario "
-//                            +task.getException().getLocalizedMessage(),Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
 
+
+                    //si está verificado pasa esto
+                    Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
+                    startActivity(intent2);
+
+                }else{
+                    Toast.makeText(RegisterActivity.this,"No se pudo registrar el usuario "
+                            +task.getException().getLocalizedMessage(),Toast.LENGTH_LONG).show();
                 }
             }
         });

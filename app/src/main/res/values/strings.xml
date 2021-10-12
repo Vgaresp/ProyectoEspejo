@@ -1,8 +1,18 @@
 <resources>
     <string name="app_name">AppEspejo</string>
-    <string name="welcome_home">Welcome home</string>
+    <string name="welcome_home">Bienvenido</string>
 <!--    <string name="default_web_client_id" translatable="false">123.apps.googleusercontent.com</string>-->
     <string name="facebook_app_id">1749306888593082</string>
     <string name="fb_login_protocol_scheme">fb1749306888593082</string>
-
+    <string name="cerrarsesion">Cerrar Sesión</string>
+    <string name="login">Inicio Sesión</string>
+    <string name="registro">Registrarse</string>
+    <string name="recupecontra">Recuperar la contraseña</string>
+    <string name="contrasenya">Contraseña</string>
+    <string name="tuemail">Tu email</string>
+    <string name="enviar">Enviar</string>
+    <string name="registrarme">Registrarme</string>
+    <string name="apellido">Apellido</string>
+    <string name="nombre">Nombre:</string>
+    <string name="repitcontra">Repetir contraseña</string>
 </resources>
