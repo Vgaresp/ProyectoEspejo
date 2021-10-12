@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -68,23 +69,26 @@ import java.util.regex.Pattern;
 public class LoginActivity extends AppCompatActivity {
 
     Context context;
-    private String name="";
-    private String pass="";
+//    private String name="";
+//    private String pass="";
     public GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CallbackManager callbackManager;
-//    private LoginButton loginButton;
+    private LoginButton loginButton;
+    FirebaseUser usuario;
 
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-////        updateUI(currentUser);
-//    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        usuario = FirebaseAuth.getInstance().getCurrentUser();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        updateUI(currentUser);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
             callbackManager = CallbackManager.Factory.create();
 
             LoginButton loginButton = findViewById(R.id.login_button);
-            loginButton.setPermissions(Arrays.asList("email,user_gender"));
+            loginButton.setPermissions(Arrays.asList("name,email,user_gender"));
 
             loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
@@ -124,7 +128,10 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
 
-        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+
+//    AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//    boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 if(currentAccessToken == null){
@@ -132,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
+
 
     @Override
     protected void onDestroy() {
@@ -153,47 +161,87 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+    // GetContent creates an ActivityResultLauncher<String> to allow you to pass
+    // in the mime type you'd like to allow the user to select
+    /**   ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+          new ActivityResultCallback<Uri>() {
 
-        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(@Nullable JSONObject object, @Nullable GraphResponse graphResponse) {
-                Log.d("Demo", object.toString());
-            }
-        });
+                @Override
+                public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Bundle bundle = new Bundle();
-        bundle.putString("fields","gender, first_name,  email");
-        graphRequest.setParameters(bundle);
-        graphRequest.executeAsync();
+//     -------------------------------------------------------------------------------------------
+//     --------------------------------------facebook---------------------------------------------
+//     -------------------------------------------------------------------------------------------
 
-//        if (RC_SIGN_IN == 123) {
-//                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//                        try {
-//                            // Google Sign In was successful, authenticate with Firebase
-//                            GoogleSignInAccount account = task.getResult(ApiException.class);
-////                                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-//                            firebaseAuthWithGoogle(account.getIdToken());
-//                        } catch (ApiException e) {
-//                            // Google Sign In failed, update UI appropriately
-////                                Log.w(TAG, "Google sign in failed", e);
-//                        }
+                    callbackManager.onActivityResult(requestCode, resultCode, data);
+
+                    GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(@Nullable JSONObject object, @Nullable GraphResponse graphResponse) {
+                            Log.d("Demo", object.toString());
+                        }
+                    });
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("fields","id, name, email, gender");
+                    graphRequest.setParameters(bundle);
+                    graphRequest.executeAsync();
+
+//      -------------------------------------------------------------------------------------------
+//      -------------------------------------------------------------------------------------------
+
+
+//      -------------------------------------------------------------------------------------------
+//      ----------------------------------------google---------------------------------------------
+//      -------------------------------------------------------------------------------------------
+
+                    // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+                    if (requestCode == RC_SIGN_IN) {
+                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                        try {
+                            // Google Sign In was successful, authenticate with Firebase
+                            GoogleSignInAccount account = task.getResult(ApiException.class);
+//                            Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+                            firebaseAuthWithGoogle(account.getIdToken());
+                        } catch (ApiException e) {
+                            // Google Sign In failed, update UI appropriately
+//                            Log.w(TAG, "Google sign in failed", e);
+                        }
+                    }
+                }
+            });
+
+//      -------------------------------------------------------------------------------------------
+//      -------------------------------------------------------------------------------------------
+
+
+
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        callbackManager.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
 //
-//                    } else if (RC_SIGN_IN == 321) {
-//                        // ToDo : Do your stuff...
-//                    }
-    }
+//        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+//            @Override
+//            public void onCompleted(@Nullable JSONObject object, @Nullable GraphResponse graphResponse) {
+//                Log.d("Demo", object.toString());
+//            }
+//        });
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString("fields","id, name, email, gender");
+//        graphRequest.setParameters(bundle);
+//        graphRequest.executeAsync();
+//    }
 
+          **/
 
         private void signIn() {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 //            activityResultLaunch.launch(signInIntent);
 //            startActivityForResult(signInIntent, RC_SIGN_IN);
         }
-
 
 //    ActivityResultLauncher<Intent> activityResultLaunch = registerForActivityResult(
 //            new ActivityResultContracts.StartActivityForResult(),
@@ -219,7 +267,6 @@ public class LoginActivity extends AppCompatActivity {
 //                    }
 //                }
 //            });
-
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
@@ -269,17 +316,29 @@ public class LoginActivity extends AppCompatActivity {
                 String inputPassword = textPassword.getText().toString();
 
                 if(!inputName.isEmpty() || !inputPassword.isEmpty()){
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(inputName,inputPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>(){
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                            }else{
-                                Toast.makeText(LoginActivity.this, "Incorrecto usuario o/y contrasena", Toast.LENGTH_SHORT).show();
+
+                    if(usuario.isEmailVerified()){
+                        FirebaseAuth.getInstance().signInWithEmailAndPassword(inputName,inputPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>(){
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    usuario.sendEmailVerification();
+                                    Toast.makeText(LoginActivity.this, "El correo ha sido enviado", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                    startActivity(intent);
+                                }else{
+                                    Toast.makeText(LoginActivity.this, "Incorrecto usuario o/y contrasena", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+
+                    }
+                    else{
+                        Toast.makeText(LoginActivity.this, "Necesitas verificar tu email", Toast.LENGTH_SHORT).show();
+                    }
+
+
+
                 }
                 if(inputName.isEmpty() || inputPassword.isEmpty()){
                     Toast.makeText(LoginActivity.this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();

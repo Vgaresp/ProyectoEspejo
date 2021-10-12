@@ -118,7 +118,7 @@
         android:id="@+id/textInputLayout"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="64dp"
         android:backgroundTint="#32435C"
         android:textColor="#000000"
         android:textColorHint="#7D7B7B"
@@ -132,10 +132,12 @@
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="#7E7D7D">
 
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditText"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:backgroundTint="#32435C"
             android:fontFamily="@font/lucidagrande"
             android:hint="Contraseña"
@@ -145,11 +147,7 @@
             android:textColorHint="#7C7A7A"
             android:textColorLink="#448AFF"
             app:hintTextColor="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
-
-
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <View
@@ -195,7 +193,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/fb45"
+        android:background="@color/white"
         android:capitalize="none"
         android:clickable="false"
         android:drawableBottom="@drawable/fb45"
@@ -212,8 +210,10 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googlelib"
-        android:layout_width="300dp"
-        android:layout_height="30dp">
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </com.google.android.gms.common.SignInButton>
 

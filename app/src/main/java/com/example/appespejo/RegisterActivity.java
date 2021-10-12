@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +37,8 @@ public class RegisterActivity extends AppCompatActivity {
     private String repetir="";
     private String nombree = "";
     private String apellido = "";
+    FirebaseUser usuarioo;
+    private final static int RC_SIGN_IN = 123;
 
     FirebaseAuth mAuth;
     DatabaseReference mDataBase;
@@ -48,14 +52,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDataBase = FirebaseDatabase.getInstance().getReference();
+        usuarioo = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     private void setup(){
 
         Button register = this.findViewById(R.id.registrarmeButton);
         EditText usuario = this.findViewById(R.id.EditTextRegUsername);
-//        EditText contrasena = this.findViewById(R.id.editTextRegContras);
-//        EditText repit = this.findViewById(R.id.repitPass);
         EditText nombre = this.findViewById(R.id.Nombre);
         EditText apellidos = this.findViewById(R.id.Apellido);
         TextInputEditText contrasena = this.findViewById(R.id.textInputEditText);
@@ -79,8 +82,15 @@ public class RegisterActivity extends AppCompatActivity {
                     else if(!repetir.equals(pass)){
                         Toast.makeText(RegisterActivity.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                     }
+                    else if(name.equals(usuarioo.getEmail())){
+                        Toast.makeText(RegisterActivity.this, "El usuario ya esta registrado", Toast.LENGTH_SHORT).show();
+                    }
 
                     else{
+//                        verificamos correo
+//                        Toast.makeText(RegisterActivity.this, "El mensaje para verificar tu correo ha sido enviado correctamente", Toast.LENGTH_SHORT).show();
+
+//                        Si correo esta verificado registramos al usuario.
                         registerUser();
                     }
 
@@ -97,7 +107,9 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
+//  ----------------------------------------------------------------------------------------
+//                    PARA ENVIAR DATOS A FIRESTORE
+//  ----------------------------------------------------------------------------------------
 /*
                     String id = mAuth.getCurrentUser().getUid();
         EditText usuario = this.findViewById(R.id.EditTextRegUsername);
@@ -136,45 +148,44 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
 
+*/
+//  ----------------------------------------------------------------------------------------
+//  ----------------------------------------------------------------------------------------
+//                        usuario.sendEmailVerification();
 
-//        mAuth.createUserWithEmailAndPassword(name,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                if(task.isSuccessful()){
-//
-///*                    Map<String,Object> map = new HashMap<>();
-//                    map.put("Usuario",name);
-//                    map.put("Contrasena",pass);
-//
-//
-//
-//                    String id = mAuth.getCurrentUser().getUid();
-//
-//                    mDataBase.child("Users").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> taskZ) {
-//                            if(taskZ.isSuccessful()){
-//*/
-//                    Intent intent2 = new Intent(RegisterActivity.this, HomeActivity.class);
-//                    startActivity(intent2);
-//                    //finish(); //Para evitar que vuelva a la pantalla del registro
-//
-//  /*                          }
-//                            else{
-//                                Toast.makeText(RegisterActivity.this, "Habia un error en crear nuevos datos", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
-//*/
-//                }else{
-//                    Toast.makeText(RegisterActivity.this,"No se pudo registrar el usuario "
-//                            +task.getException().getLocalizedMessage(),Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
+                    login();
+//                    Intent intent = new Intent(RegisterActivity.this, VerificarActivity.class);
+//                    startActivity(intent);
 
-                }
+
+//                        Toast.makeText(RegisterActivity.this, "El email para verificar tu email ha sido enviado correctamente", Toast.LENGTH_SHORT).show();
+//                }startActivityForResult(AuthUI.getInstance()
+//                        .createSignInIntentBuilder().setAvailableProviders(Arrays.asList(
+//                                new AuthUI.IdpConfig.EmailBuilder().setAllowNewAccounts(true)
+//                                        .build(),
+//                                new AuthUI.IdpConfig.GoogleBuilder().build()
+//                        )).build(), RC_SIGN_IN);
             }
-        });
+        }});
+
+    }
+
+    private void login() {
+
+        usuarioo = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuarioo.isEmailVerified() && usuarioo != null) {
+            Toast.makeText(this, "inicia sesión: "+usuarioo.getDisplayName()+
+                    " - "+ usuarioo.getEmail(),Toast.LENGTH_LONG).show();
+            Intent i = new Intent(RegisterActivity.this, HomeActivity.class);
+            startActivity(i);
+        } else {
+
+            if (usuarioo != null) {
+                usuarioo.sendEmailVerification();
+                Toast.makeText(this, "Se ha enviado un correo de confirmación", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }
     }
 }
