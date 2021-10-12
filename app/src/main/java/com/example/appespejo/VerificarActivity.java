@@ -80,7 +80,6 @@ public class VerificarActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 login();
             } else {
-
                 IdpResponse response = IdpResponse.fromResultIntent(data);
                 if (response == null) {
                     Toast.makeText(this, "Cancelado", Toast.LENGTH_LONG).show();
@@ -94,9 +93,7 @@ public class VerificarActivity extends AppCompatActivity {
                     Toast.makeText(this, "Error desconocido", Toast.LENGTH_LONG).show();
                     return;
                 }
-
             }
-
         }
     }
 }
