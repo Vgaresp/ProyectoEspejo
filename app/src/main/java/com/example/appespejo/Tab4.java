@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 public class Tab4 extends Fragment {
-    @Override
+    /*@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }*/
+    public Tab4(){
+        // require a empty public constructor
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

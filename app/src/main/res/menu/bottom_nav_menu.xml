@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <item
     android:id="@+id/ligth"
-    android:title="Person"
-    android:icon="@mipmap/light"/>
+    android:title="Ligth"
+    android:icon="@drawable/ic_baseline_highlight_24"/>
 <item
     android:id="@+id/music"
-    android:title="Home"
-    android:icon="@mipmap/music"/>
+    android:title="Music"
+    android:icon="@drawable/ic_baseline_music_note_24"/>
 <item
     android:id="@+id/photo"
-    android:title="Settings"
-    android:icon="@mipmap/photo"/>
+    android:title="Photos"
+    android:icon="@drawable/ic_baseline_photo_24"/>
     <item
-        android:id="@+id/person"
+        android:id="@+id/perfil"
         android:title="Person"
-        android:icon="@mipmap/perfil"/>
+        android:icon="@drawable/ic_baseline_person_24"/>
     <item
-        android:id="@+id/setting"
-        android:title="Home"
-        android:icon="@mipmap/conf"/>
+        android:id="@+id/conf"
+        android:title="Setting"
+        android:icon="@drawable/ic_baseline_construction_24"/>
 </menu>
