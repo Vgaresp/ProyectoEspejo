@@ -1,5 +1,6 @@
 package com.example.appespejo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,29 +22,22 @@ public class Tab1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab1, container, false);
+        new ColorPickerPopup.Builder(this.getContext())
+                .initialColor(Color.RED) // Set initial color
+                .enableBrightness(false) // Enable brightness slider or not
+                .enableAlpha(false) // Enable alpha slider or not
+                .okTitle("Choose")
+                .cancelTitle("Cancel")
+                .showIndicator(false)
+                .showValue(false)
+                .build();
+                /*.show(v, new ColorPickerPopup.ColorPickerObserver() {
+                    @Override
+                    public void onColorPicked(int color) {
+                        v.setBackgroundColor(color);
+                    }
 
-        //ColorPickerView colorPicker = v.findViewById(R.id.colorPicker);
-
-        //colorPicker.show(v, new )
-
-            new ColorPickerPopup.Builder(this.getContext());
-                    /*.initialColor(Color.RED) // Set initial color
-                    .enableBrightness(false) // Enable brightness slider or not
-                    .enableAlpha(false) // Enable alpha slider or not
-                    .okTitle("Choose")
-                    .cancelTitle("Cancel")
-                    .showIndicator(true)
-                    .showValue(true)
-                    .build()
-                    .show(v, new ColorPickerPopup.ColorPickerObserver() {
-                        @Override
-                        public void onColorPicked(int color) {
-                            v.setBackgroundColor(color);
-                        }
-
-                    });*/
-
-
+                });*/
         return inflater.inflate(R.layout.tab1, container, false);
     }
 }
