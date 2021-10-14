@@ -11,13 +11,10 @@ import androidx.fragment.app.Fragment;
 import top.defaults.colorpicker.ColorPickerPopup;
 
 public class Tab1 extends Fragment {
-   /* @Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }*/
-   public Tab1(){
-       // require a empty public constructor
-   }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:contentDescription="gota"
-    tools:context=".HomeActivity">
+    tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
